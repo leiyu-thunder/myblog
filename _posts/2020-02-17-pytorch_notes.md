@@ -1,5 +1,6 @@
 ---
 toc: true
+layout: post
 description: pytorch 使用中的一些心得笔记。
 categories: [pytorch]
 ---
