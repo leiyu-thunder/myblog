@@ -1,0 +1,14 @@
+<h1 id="pytorch-notes">pytorch notes</h1>
+
+<h2 id="detach的作用">detach的作用</h2>
+
+<p>在optimizer的代码中，将梯度置零的方法是：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">detach_</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>困惑：第二行代码就可以实现置零，第一行代码用来干什么？</p>
+
+<p>解答：第一行代码用于将之前的梯度从计算图中剥离。pytorch中梯度计算的方式是将之前的梯度叠加，如果不剥离梯度，只是置零，那么这个梯度一直需要保存，所以如果计算了100次，那么就需要100倍的空间来保存这些全部是零的结果，导致空间浪费。</p>
+

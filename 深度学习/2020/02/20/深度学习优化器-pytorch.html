@@ -1,0 +1,293 @@
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
+
+<h1 id="常用深度学习优化器理论与pytorch代码">常用深度学习优化器：理论与pytorch代码</h1>
+
+<h2 id="sgdstochastic-gradient-descent">SGD(Stochastic Gradient Descent)</h2>
+
+<p>随机梯度下降中的”stochastic”表示用小批量数据代表模型梯度更新方向。</p>
+
+<p>公式：</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mi>θ</mi><mo>−</mo><mi>η</mi><mo>∗</mo><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo separator="true">;</mo><msup><mi>x</mi><mi>i</mi></msup><mo separator="true">;</mo><msup><mi>y</mi><mi>i</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\theta = \theta - \eta * \nabla_\theta J(\theta;x^i;y^i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1246639999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord">∇</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8746639999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span></span></span></span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8746639999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>
+
+<p>pytorch 代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="n">d_p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">d_p</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="sgd-with-momentum">SGD with momentum</h2>
+
+<p>SGD的缺点之一是容易在局部极值点反复震荡，解决方法之一在更新过程中加入历史更新信息。类似于从山上滚下的石头，没有阻力的话动量越来越大，遇到阻力动量变小。采用这种方法能够加快收敛速度，并减小震荡。</p>
+
+<p>公式：</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>γ</mi><mo>∗</mo><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>η</mi><mo>∗</mo><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mspace linebreak="newline"></mspace><mi>θ</mi><mo>=</mo><mi>θ</mi><mo>−</mo><msub><mi>v</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">v_t = \gamma * v_{t-1} + \eta * \nabla_\theta J(\theta) \\
+\theta = \theta - v_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.791661em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord">∇</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
+
+<p>pytorch 代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="n">d_p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">param_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s">'momentum_buffer'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param_state</span><span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">param_state</span><span class="p">[</span><span class="s">'momentum_buffer'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">d_p</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">param_state</span><span class="p">[</span><span class="s">'momentum_buffer'</span><span class="p">]</span>
+        <span class="n">buf</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">momentum</span><span class="p">)</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">d_p</span><span class="p">)</span>
+    
+    <span class="n">d_p</span> <span class="o">=</span> <span class="n">buf</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">d_p</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>其中<code class="highlighter-rouge">buf</code>就是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span>，此外，pytorch的官方实现中跟公式的区别在于代码中对于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>∗</mo><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\gamma * v_{t-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.638891em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span>项也乘了<code class="highlighter-rouge">lr</code>，也就是公式中的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span></span></span></span>。</p>
+
+<h2 id="nesterov-accelerated-gradient-nag">Nesterov Accelerated Gradient (NAG)</h2>
+
+<p>公式：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+\theta^\prime …" style="color:#cc0000">\begin{align}
+\theta^\prime &amp;= \theta - \gamma v_{t-1} \\
+v_t &amp;= \gamma v_{t-1} + \eta \nabla_\theta J(\theta^\prime) \\
+\theta &amp;= \theta - v_t
+\end{align}</span>
+
+<p>pytorch 实现公式推导：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+\theta_{t-1}^\…" style="color:#cc0000">\begin{align}
+\theta_{t-1}^\prime &amp;= \theta_{t-1}-\eta \gamma v_{t-1} \\
+v_t &amp;= \gamma v_{t-1} + \nabla_\theta J(\theta_{t-1}^\prime) \\
+\theta_t &amp;= \theta_{t-1} - \eta v_t \\
+&amp;= \theta_{t-1}^\prime + \eta \gamma v_{t-1} - \eta v_t \\
+\theta_t^\prime &amp;= \theta_t - \eta \gamma v_t \\
+&amp;= \theta_{t-1}^\prime + \eta \gamma v_{t-1} - \eta v_t - \eta \gamma v_t \\
+&amp;= \theta_{t-1}^\prime - \eta \nabla_\theta J(\theta_{t-1}^\prime) - \eta\gamma v_t \\
+&amp;= \theta_{t-1}^\prime - \eta(\nabla_\theta J(\theta_{t-1}^\prime) + \gamma v_t) \\
+v_{t+1} &amp;= \gamma v_t + \nabla_\theta J(\theta_t^\prime)
+\end{align}</span>
+
+<p>pytorch 代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="n">d_p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="n">param_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s">'momentum_buffer'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param_state</span><span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">param_state</span><span class="p">[</span><span class="s">'momentum_buffer'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">d_p</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">param_state</span><span class="p">[</span><span class="s">'momentum_buffer'</span><span class="p">]</span>
+        <span class="n">buf</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">momentum</span><span class="p">)</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">dampening</span><span class="p">,</span> <span class="n">d_p</span><span class="p">)</span>
+    
+    <span class="n">d_p</span> <span class="o">=</span> <span class="n">d_p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">momentum</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span> <span class="c1"># nesterov更新
+</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">d_p</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="adagrad">AdaGrad</h2>
+
+<p>AdaGrad是为了解决SGD中学习率固定不变的问题，使得更新的学习率具有自适应能力。具体的想法就是用一个参数来存储历史梯度信息，然后在对应的更新过程中对学习率进行去归一化，从而实现对梯度较大的参数学习率较小，梯度较小的参数学习率较大的自适应更新。</p>
+
+<p>公式：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+G_{t,ii} &amp;= G_…" style="color:#cc0000">\begin{align}
+G_{t,ii} &amp;= G_{t-1,ii} + g_{t,i}^2 \\
+\theta_{t+1,i} &amp;= \theta_{t,i} - \frac{\eta}{\sqrt{G_{t,ii}+\epsilon}} \cdot g_{t,i}
+\end{align}</span>
+
+<p>pytorch代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+    <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">clr</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">group</span><span class="p">[</span><span class="s">'lr_decay'</span><span class="p">])</span>
+
+    <span class="n">state</span><span class="p">[</span><span class="s">'sum'</span><span class="p">]</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>  <span class="c1"># 历史信息更新
+</span>    <span class="n">std</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s">'sum'</span><span class="p">]</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s">'eps'</span><span class="p">])</span> <span class="c1"># 自适应调整项
+</span>    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">addcdiv_</span><span class="p">(</span><span class="o">-</span><span class="n">clr</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="adadelta">Adadelta</h2>
+
+<p>Adadelta是AdaGrad的改进，不再保存过去的所有梯度信息，而是采用decaying average的方法存储历史梯度信息和参数值。</p>
+
+<p>公式：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+E[g^2]_t &amp;= \r…" style="color:#cc0000">\begin{align}
+E[g^2]_t &amp;= \rho E[g^2]_{t-1} + (1-\rho)g^2_t \\
+\Delta x_t &amp;=-\frac{\sqrt{E[\Delta x^2]_{t-1}+\epsilon}}{\sqrt{E[g^2]_t+\epsilon}}\cdot g_t \\
+E[\Delta x^2]_t &amp;= \rho E[\Delta x^2]_{t-1} + (1-\rho)\Delta x^2_t \\
+x_{t+1} &amp;= x_t + \Delta x_t
+\end{align}</span>
+
+<p>pytorch 代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+
+    <span class="c1"># State initialization
+</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'square_avg'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">memory_format</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">preserve_format</span><span class="p">)</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'acc_delta'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">memory_format</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">preserve_format</span><span class="p">)</span>
+
+    <span class="n">square_avg</span><span class="p">,</span> <span class="n">acc_delta</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s">'square_avg'</span><span class="p">],</span> <span class="n">state</span><span class="p">[</span><span class="s">'acc_delta'</span><span class="p">]</span>
+    <span class="n">rho</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s">'rho'</span><span class="p">],</span> <span class="n">group</span><span class="p">[</span><span class="s">'eps'</span><span class="p">]</span>
+
+    <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+		
+    <span class="c1"># 主体更新代码
+</span>    <span class="n">square_avg</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">square_avg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt_</span><span class="p">()</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">acc_delta</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt_</span><span class="p">()</span><span class="o">.</span><span class="n">div_</span><span class="p">(</span><span class="n">std</span><span class="p">)</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">delta</span><span class="p">)</span>
+    <span class="n">acc_delta</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="rmsprop">RMSprop</h2>
+
+<p>RMSprop实际上就是把AdaGrad中历史梯度信息的累积方法改为decaying average方式。</p>
+
+<p>公式：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+E[g^2]_t &amp;= \r…" style="color:#cc0000">\begin{align}
+E[g^2]_t &amp;= \rho E[g^2]_{t-1} + (1-\rho)g^2_t \\
+\theta_{t+1} &amp;= \theta_t - \frac{\eta}{\sqrt{E[g^2]_t+\epsilon}} \cdot g_t
+\end{align}</span>
+
+<p>pytorch 代码</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+
+    <span class="c1"># State initialization
+</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'square_avg'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">memory_format</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">preserve_format</span><span class="p">)</span>
+
+    <span class="n">square_avg</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s">'square_avg'</span><span class="p">]</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s">'alpha'</span><span class="p">]</span>
+
+    <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">square_avg</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="n">square_avg</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s">'eps'</span><span class="p">])</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">addcdiv_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">grad</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>pytorch 官方实现中还有一个可选参数<code class="highlighter-rouge">centered</code>，表示一个<code class="highlighter-rouge">centered</code>版本的RMSprop，其更新公式如下：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+E[g^2]_t &amp;= \r…" style="color:#cc0000">\begin{align}
+E[g^2]_t &amp;= \rho E[g^2]_{t-1} + (1-\rho)g^2_t \\
+E[g]_t &amp;= \rho E[g]_{t-1} + (1-\rho)g_t \\
+\theta_{t+1} &amp;= \theta_t - \frac{\eta}{\sqrt{E[g^2]_t - E[g]_t^2 +\epsilon}} \cdot g_t
+\end{align}</span>
+
+<h2 id="adam-adaptive-moment-estimation">Adam (Adaptive Moment Estimation)</h2>
+
+<p>Adam受到RMSprop和Momentum的启发，利用梯度的一阶和二阶矩估计为每个参数自适应地计算学习率。</p>
+
+<p>公式：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+\alpha:learnin…" style="color:#cc0000">\begin{align}
+\alpha:learning rate;\quad \beta_1&amp;=0.9, \beta_2=0.999;\quad t:timestep \\
+m_t &amp;= \beta_1 m_{t-1} + (1-\beta_1)\cdot g_t \\
+v_t &amp;= \beta_2 v_{t-1} + (1-\beta_2)\cdot g_t^2 \\
+\hat{m}_t &amp;= \frac{m_t}{1-\beta_1^t} \\
+\hat{v}_t &amp;= \frac{v_t}{1-\beta_2^t} \\
+\theta_t &amp;= \theta_{t-1} - \alpha \cdot \frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon}
+\end{align}</span>
+
+<p>pytorch代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+
+    <span class="c1"># State initialization
+</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Exponential moving average of gradient values
+</span>        <span class="n">state</span><span class="p">[</span><span class="s">'exp_avg'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">memory_format</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">preserve_format</span><span class="p">)</span>
+        <span class="c1"># Exponential moving average of squared gradient values
+</span>        <span class="n">state</span><span class="p">[</span><span class="s">'exp_avg_sq'</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">memory_format</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">preserve_format</span><span class="p">)</span>
+
+    <span class="n">exp_avg</span><span class="p">,</span> <span class="n">exp_avg_sq</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s">'exp_avg'</span><span class="p">],</span> <span class="n">state</span><span class="p">[</span><span class="s">'exp_avg_sq'</span><span class="p">]</span>
+
+    <span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s">'betas'</span><span class="p">]</span>
+
+    <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">bias_correction1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">beta1</span> <span class="o">**</span> <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span>
+    <span class="n">bias_correction2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span> <span class="o">**</span> <span class="n">state</span><span class="p">[</span><span class="s">'step'</span><span class="p">]</span>
+
+    <span class="c1"># Decay the first and second moment running average coefficient
+</span>    <span class="n">exp_avg</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+    <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+
+    <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span><span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bias_correction2</span><span class="p">))</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s">'eps'</span><span class="p">])</span>
+
+    <span class="n">step_size</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">]</span> <span class="o">/</span> <span class="n">bias_correction1</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">addcdiv_</span><span class="p">(</span><span class="o">-</span><span class="n">step_size</span><span class="p">,</span> <span class="n">exp_avg</span><span class="p">,</span> <span class="n">denom</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>pytorch官方代码中采用了跟论文方法等效的一种修改的实现方式，修改的更新公式如下：</p>
+
+<span class="katex-error" title="ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+\alpha_t &amp;= \a…" style="color:#cc0000">\begin{align}
+\alpha_t &amp;= \alpha \cdot \frac{\sqrt{1-\beta^t_2}}{1-\beta_1^t} \\
+\theta_t &amp;= \theta_{t-1} - \alpha_t \cdot \frac{m_t}{\sqrt{v_t}+\epsilon}
+\end{align}</span>
+
+<h2 id="adam-with-weight-decay">Adam with Weight Decay</h2>
+
+<p>这是一篇解释AdamW的好文章：<a href="https://towardsdatascience.com/why-adamw-matters-736223f31b5d">Why AdamW matters</a>。</p>
+
+<p>AdamW通过正确的weight修正方式，弥补了Adam with L2 Regularization的不足，实验结果表明AdamW可以实现快速收敛，这里有一篇fast.ai上的分析文章：<a href="https://www.fast.ai/2018/07/02/adam-weight-decay/">AdamW and Super-convergence is now the fastest way to train neural nets</a>。</p>
+
+<p>从下面的图中可以清楚看到L2正则化与Weight decay更新的区别。L2正则化因为是在Loss function中加入正则化项，不仅影响梯度的计算，也影响了$m_t$和$v_t$这两个保存梯度历史信息的参数。而weight decay是在参数更新的时候直接进行计算，不会将weight decay的影响带入其他地方。</p>
+
+<p class="center"><img src="/myblog/images/2020-02-20-深度学习优化器/AdamL2VsAdamW.png" alt="" title="from: Fixing Weight Decay Regularization in Adam” by Ilya Loshchilov, Frank Hutter." /></p>
+
+<p>pytorch 代码：（代码跟Adam的代码相比只是多了一行进行weight decay的计算，其他的完全一样）</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s">'params'</span><span class="p">]:</span>
+    <span class="c1"># Perform stepweight decay
+</span>    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">]</span> <span class="o">*</span> <span class="n">group</span><span class="p">[</span><span class="s">'weight_decay'</span><span class="p">])</span>
+    
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span>
+    <span class="c1"># ...
+</span>    <span class="c1"># 同Adam代码
+</span></code></pre></div></div>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ol>
+  <li><a href="https://byjiang.com/2017/09/10/A_Brief_Of_Optimization_Algorithms/">梯度下降优化算法综述与PyTorch实现源码剖析</a></li>
+  <li><a href="https://arxiv.org/abs/1609.04747">An overview of gradient descent optimization algorithms</a></li>
+  <li><a href="https://www.fast.ai/2018/07/02/adam-weight-decay/">AdamW and Super-convergence is now the fastest way to train neural nets</a></li>
+  <li><a href="https://towardsdatascience.com/why-adamw-matters-736223f31b5d">Why AdamW matters</a></li>
+</ol>
