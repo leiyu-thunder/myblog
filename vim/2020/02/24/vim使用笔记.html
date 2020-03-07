@@ -1,27 +1,176 @@
-<h1 id="vim使用笔记">vim使用笔记</h1>
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Vim使用笔记 | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Vim使用笔记" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="vim 常用操作命令。" />
+<meta property="og:description" content="vim 常用操作命令。" />
+<link rel="canonical" href="https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html" />
+<meta property="og:url" content="https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-02-24T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-02-24T00:00:00-06:00","headline":"Vim使用笔记","description":"vim 常用操作命令。","mainEntityOfPage":{"@type":"WebPage","@id":"https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html"},"@type":"BlogPosting","url":"https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html","dateModified":"2020-02-24T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/myblog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://leiyu-thunder.github.io/myblog/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/myblog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Vim使用笔记 | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Vim使用笔记" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="vim 常用操作命令。" />
+<meta property="og:description" content="vim 常用操作命令。" />
+<link rel="canonical" href="https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html" />
+<meta property="og:url" content="https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-02-24T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-02-24T00:00:00-06:00","headline":"Vim使用笔记","description":"vim 常用操作命令。","mainEntityOfPage":{"@type":"WebPage","@id":"https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html"},"@type":"BlogPosting","url":"https://leiyu-thunder.github.io/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html","dateModified":"2020-02-24T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
 
-<h2 id="常规文本操作">常规文本操作</h2>
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://leiyu-thunder.github.io/myblog/feed.xml" title="fastpages" />
 
-<h3 id="删除撤销复制粘贴等">删除、撤销、复制、粘贴等</h3>
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    // remove paragraph tags in rendered toc (happens from notebooks)
+    var toctags = document.querySelectorAll(".toc-entry")
+    toctags.forEach(e => (e.firstElementChild.innerText = e.firstElementChild.innerText.replace('¶', '')))
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/myblog/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/myblog/about/">About Me</a><a class="page-link" href="/myblog/search/">Search</a><a class="page-link" href="/myblog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Vim使用笔记</h1><p class="page-description">vim 常用操作命令。</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-02-24T00:00:00-06:00" itemprop="datePublished">
+        Feb 24, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/myblog/categories/#vim">vim</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#vim使用笔记">vim使用笔记</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#常规文本操作">常规文本操作</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#删除撤销复制粘贴等">删除、撤销、复制、粘贴等</a></li>
+<li class="toc-entry toc-h3"><a href="#各种插入模式">各种插入模式</a></li>
+<li class="toc-entry toc-h3"><a href="#光标移动">光标移动</a></li>
+<li class="toc-entry toc-h3"><a href="#屏幕滚动">屏幕滚动</a></li>
+<li class="toc-entry toc-h3"><a href="#文件操作">文件操作</a></li>
+<li class="toc-entry toc-h3"><a href="#重复命令">重复命令</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#不同buffer之间跳转">不同buffer之间跳转</a></li>
+<li class="toc-entry toc-h2"><a href="#多窗口与窗口跳转">多窗口与窗口跳转</a></li>
+<li class="toc-entry toc-h2"><a href="#代码跳转">代码跳转</a></li>
+<li class="toc-entry toc-h2"><a href="#文本搜索与替换">文本搜索与替换</a></li>
+<li class="toc-entry toc-h2"><a href="#正则表达式">正则表达式</a></li>
+<li class="toc-entry toc-h2"><a href="#使用终端">使用终端</a></li>
+<li class="toc-entry toc-h2"><a href="#vim-插件管理">vim 插件管理</a></li>
+<li class="toc-entry toc-h2"><a href="#其他命令">其他命令</a></li>
+</ul>
+</li>
+</ul><h1 id="vim使用笔记">
+<a class="anchor" href="#vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>vim使用笔记</h1>
+
+<h2 id="常规文本操作">
+<a class="anchor" href="#%E5%B8%B8%E8%A7%84%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C" aria-hidden="true"><span class="octicon octicon-link"></span></a>常规文本操作</h2>
+
+<h3 id="删除撤销复制粘贴等">
+<a class="anchor" href="#%E5%88%A0%E9%99%A4%E6%92%A4%E9%94%80%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E7%AD%89" aria-hidden="true"><span class="octicon octicon-link"></span></a>删除、撤销、复制、粘贴等</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">u</code>撤销操作</li>
-  <li><code class="highlighter-rouge">Ctrl-r</code>重做操作</li>
-  <li><code class="highlighter-rouge">:↑</code>在切换上一个命令</li>
-  <li><code class="highlighter-rouge">yy</code>复制</li>
-  <li><code class="highlighter-rouge">p</code>粘贴（p/P都可以，p是表⽰在当前位置之后，P表⽰在当前位置之前））</li>
-  <li><code class="highlighter-rouge">dd</code>删除当前行</li>
+  <li>
+<code class="highlighter-rouge">u</code>撤销操作</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-r</code>重做操作</li>
+  <li>
+<code class="highlighter-rouge">:↑</code>在切换上一个命令</li>
+  <li>
+<code class="highlighter-rouge">yy</code>复制</li>
+  <li>
+<code class="highlighter-rouge">p</code>粘贴（p/P都可以，p是表⽰在当前位置之后，P表⽰在当前位置之前））</li>
+  <li>
+<code class="highlighter-rouge">dd</code>删除当前行</li>
 </ul>
 
-<h3 id="各种插入模式">各种插入模式</h3>
+<h3 id="各种插入模式">
+<a class="anchor" href="#%E5%90%84%E7%A7%8D%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>各种插入模式</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">a</code> → 在光标后插⼊</li>
-  <li><code class="highlighter-rouge">o</code> → 在当前⾏后插⼊⼀个新⾏</li>
-  <li><code class="highlighter-rouge">O</code> → 在当前⾏前插⼊⼀个新⾏</li>
+  <li>
+<code class="highlighter-rouge">a</code> → 在光标后插⼊</li>
+  <li>
+<code class="highlighter-rouge">o</code> → 在当前⾏后插⼊⼀个新⾏</li>
+  <li>
+<code class="highlighter-rouge">O</code> → 在当前⾏前插⼊⼀个新⾏</li>
 </ul>
 
-<h3 id="光标移动">光标移动</h3>
+<h3 id="光标移动">
+<a class="anchor" href="#%E5%85%89%E6%A0%87%E7%A7%BB%E5%8A%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>光标移动</h3>
 
 <ul>
   <li>
@@ -80,85 +229,128 @@
   </li>
 </ul>
 
-<h3 id="屏幕滚动">屏幕滚动</h3>
+<h3 id="屏幕滚动">
+<a class="anchor" href="#%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>屏幕滚动</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">Ctrl-F</code> →屏幕向下滚动一屏</li>
-  <li><code class="highlighter-rouge">Ctrl-B</code>→屏幕向上滚动一屏</li>
-  <li><code class="highlighter-rouge">Ctrl-E</code>→屏幕向下滚动一行</li>
-  <li><code class="highlighter-rouge">Ctrl-Y</code>→屏幕向上滚动一行</li>
-  <li><code class="highlighter-rouge">Ctrl-D</code>→屏幕向下滚动半屏</li>
-  <li><code class="highlighter-rouge">Ctrl-U</code>→屏幕向上滚动半屏</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-F</code> →屏幕向下滚动一屏</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-B</code>→屏幕向上滚动一屏</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-E</code>→屏幕向下滚动一行</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-Y</code>→屏幕向上滚动一行</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-D</code>→屏幕向下滚动半屏</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-U</code>→屏幕向上滚动半屏</li>
 </ul>
 
-<h3 id="文件操作">文件操作</h3>
+<h3 id="文件操作">
+<a class="anchor" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C" aria-hidden="true"><span class="octicon octicon-link"></span></a>文件操作</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">:e &lt;path/to/file&gt;</code> → 打开⼀个⽂件</li>
-  <li><code class="highlighter-rouge">:w</code> → 存盘</li>
-  <li><code class="highlighter-rouge">:saveas &lt;path/to/file&gt;</code> → 另存为 &lt;path/to/file&gt;</li>
-  <li><code class="highlighter-rouge">:x， ZZ 或 :wq</code> → 保存并退出 (:x 表⽰仅在需要时保存，ZZ不需要输 ⼊冒号并回⻋) :q! → 退出不保存 :qa! 强⾏退出所有的正在编辑的⽂件，就算别的⽂件有更改。</li>
+  <li>
+<code class="highlighter-rouge">:e &lt;path/to/file&gt;</code> → 打开⼀个⽂件</li>
+  <li>
+<code class="highlighter-rouge">:w</code> → 存盘</li>
+  <li>
+<code class="highlighter-rouge">:saveas &lt;path/to/file&gt;</code> → 另存为 &lt;path/to/file&gt;</li>
+  <li>
+<code class="highlighter-rouge">:x， ZZ 或 :wq</code> → 保存并退出 (:x 表⽰仅在需要时保存，ZZ不需要输 ⼊冒号并回⻋) :q! → 退出不保存 :qa! 强⾏退出所有的正在编辑的⽂件，就算别的⽂件有更改。</li>
 </ul>
 
-<h3 id="重复命令">重复命令</h3>
+<h3 id="重复命令">
+<a class="anchor" href="#%E9%87%8D%E5%A4%8D%E5%91%BD%E4%BB%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>重复命令</h3>
 
 <ul>
   <li>. → (⼩数点) 可以重复上⼀次的命令</li>
-  <li><code class="highlighter-rouge">:N&lt;command&gt;</code> → 重复某个命令N次</li>
+  <li>
+<code class="highlighter-rouge">:N&lt;command&gt;</code> → 重复某个命令N次</li>
 </ul>
 
-<h2 id="不同buffer之间跳转">不同buffer之间跳转</h2>
+<h2 id="不同buffer之间跳转">
+<a class="anchor" href="#%E4%B8%8D%E5%90%8Cbuffer%E4%B9%8B%E9%97%B4%E8%B7%B3%E8%BD%AC" aria-hidden="true"><span class="octicon octicon-link"></span></a>不同buffer之间跳转</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">:bn</code>切换到下一个文件。</li>
-  <li><code class="highlighter-rouge">:bp</code>切换到上一个文件。</li>
-  <li><code class="highlighter-rouge">:ls</code>列出buffer的列表，带编号。</li>
-  <li><code class="highlighter-rouge">:b [N]</code>切换到第N个文件，例如：<code class="highlighter-rouge">:b 3</code>切换到第三个文件。</li>
-  <li><code class="highlighter-rouge">:b {filename}</code>通过文件名切换到对应的buffer，<code class="highlighter-rouge">tab</code>可以补全。</li>
+  <li>
+<code class="highlighter-rouge">:bn</code>切换到下一个文件。</li>
+  <li>
+<code class="highlighter-rouge">:bp</code>切换到上一个文件。</li>
+  <li>
+<code class="highlighter-rouge">:ls</code>列出buffer的列表，带编号。</li>
+  <li>
+<code class="highlighter-rouge">:b [N]</code>切换到第N个文件，例如：<code class="highlighter-rouge">:b 3</code>切换到第三个文件。</li>
+  <li>
+<code class="highlighter-rouge">:b {filename}</code>通过文件名切换到对应的buffer，<code class="highlighter-rouge">tab</code>可以补全。</li>
 </ul>
 
-<h2 id="多窗口与窗口跳转">多窗口与窗口跳转</h2>
+<h2 id="多窗口与窗口跳转">
+<a class="anchor" href="#%E5%A4%9A%E7%AA%97%E5%8F%A3%E4%B8%8E%E7%AA%97%E5%8F%A3%E8%B7%B3%E8%BD%AC" aria-hidden="true"><span class="octicon octicon-link"></span></a>多窗口与窗口跳转</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">:sp</code>打开一个新的水平切分窗口。</li>
-  <li><code class="highlighter-rouge">:vsplit</code>打开一个新的垂直切分窗口。</li>
+  <li>
+<code class="highlighter-rouge">:sp</code>打开一个新的水平切分窗口。</li>
+  <li>
+<code class="highlighter-rouge">:vsplit</code>打开一个新的垂直切分窗口。</li>
 </ul>
 
 <p>打开多个窗口后，以下命令在多窗口之间跳转（类似鼠标上下左右移动）：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">Ctrl-W j</code>切换到下一个窗口</li>
-  <li><code class="highlighter-rouge">Ctrl-W k</code>切换到上一个窗口</li>
-  <li><code class="highlighter-rouge">Ctrl-W h</code>切换到左边窗口</li>
-  <li><code class="highlighter-rouge">Ctrl-W l</code>切换到右边窗口</li>
-  <li><code class="highlighter-rouge">Ctrl-W w</code>在各个窗口之间轮流切换</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-W j</code>切换到下一个窗口</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-W k</code>切换到上一个窗口</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-W h</code>切换到左边窗口</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-W l</code>切换到右边窗口</li>
+  <li>
+<code class="highlighter-rouge">Ctrl-W w</code>在各个窗口之间轮流切换</li>
 </ul>
 
-<h2 id="代码跳转">代码跳转</h2>
+<h2 id="代码跳转">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E8%B7%B3%E8%BD%AC" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码跳转</h2>
 
 <ul>
-  <li>在目标文件夹下生成代码标签：<code class="highlighter-rouge">ctags -R</code></li>
+  <li>在目标文件夹下生成代码标签：<code class="highlighter-rouge">ctags -R</code>
+</li>
   <li>通过vim打开某一代码文件，把光标移到要跳转的标识符上，按<code class="highlighter-rouge">Ctrl + ]</code>跳转到对应位置，按<code class="highlighter-rouge">Ctrl + o</code>退回到跳转前的位置</li>
   <li>开启代码折叠：<code class="highlighter-rouge">:set foldmethod=indent</code>
     <ul>
-      <li><code class="highlighter-rouge">zM</code> 全部折叠</li>
-      <li><code class="highlighter-rouge">zR</code> 全部展开</li>
-      <li><code class="highlighter-rouge">zc</code> 在当前位置折叠</li>
-      <li><code class="highlighter-rouge">zo | za</code> 在当前位置展开</li>
-      <li><code class="highlighter-rouge">zC</code> 对当前区域做整体折叠；当前区域可以理解为整个函数</li>
-      <li><code class="highlighter-rouge">zO | zA</code>  对当前区域做整体展开</li>
-      <li><code class="highlighter-rouge">zj</code> 移动下一个折叠点</li>
-      <li><code class="highlighter-rouge">zk</code> 移动到上一个折叠垫</li>
+      <li>
+<code class="highlighter-rouge">zM</code> 全部折叠</li>
+      <li>
+<code class="highlighter-rouge">zR</code> 全部展开</li>
+      <li>
+<code class="highlighter-rouge">zc</code> 在当前位置折叠</li>
+      <li>
+<code class="highlighter-rouge">zo | za</code> 在当前位置展开</li>
+      <li>
+<code class="highlighter-rouge">zC</code> 对当前区域做整体折叠；当前区域可以理解为整个函数</li>
+      <li>
+<code class="highlighter-rouge">zO | zA</code>  对当前区域做整体展开</li>
+      <li>
+<code class="highlighter-rouge">zj</code> 移动下一个折叠点</li>
+      <li>
+<code class="highlighter-rouge">zk</code> 移动到上一个折叠垫</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="文本搜索与替换">文本搜索与替换</h2>
+<h2 id="文本搜索与替换">
+<a class="anchor" href="#%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2%E4%B8%8E%E6%9B%BF%E6%8D%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>文本搜索与替换</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">/pattern</code>在文本中按照pattern模式进行搜索，<code class="highlighter-rouge">n</code>查找下一个，<code class="highlighter-rouge">N</code>查找上一个</li>
-  <li><code class="highlighter-rouge">*</code>可以查找光标所在的单词，<code class="highlighter-rouge">g*</code>即可查找光标所在单词的字符序列，每次出现前后字符无要求。</li>
-  <li><code class="highlighter-rouge">s</code>命令用来查找和替换字符串，语法：<code class="highlighter-rouge">:{作用范围}s/{目标}/{替换}/{替换标志}</code></li>
+  <li>
+<code class="highlighter-rouge">/pattern</code>在文本中按照pattern模式进行搜索，<code class="highlighter-rouge">n</code>查找下一个，<code class="highlighter-rouge">N</code>查找上一个</li>
+  <li>
+<code class="highlighter-rouge">*</code>可以查找光标所在的单词，<code class="highlighter-rouge">g*</code>即可查找光标所在单词的字符序列，每次出现前后字符无要求。</li>
+  <li>
+<code class="highlighter-rouge">s</code>命令用来查找和替换字符串，语法：<code class="highlighter-rouge">:{作用范围}s/{目标}/{替换}/{替换标志}</code>
+</li>
 </ul>
 
 <p>​        例如<code class="highlighter-rouge">:%s/foo/bar/g</code>会在全局范围(<code class="highlighter-rouge">%</code>)查找<code class="highlighter-rouge">foo</code>并替换为<code class="highlighter-rouge">bar</code>，每一行中所有出现都会被替换（<code class="highlighter-rouge">g</code>）。</p>
@@ -204,44 +396,93 @@
         <p>[range] 指定文本范围，默认为整个文档</p>
       </li>
       <li>pattern 在范围 range 内的行如果匹配 pattern，则执行 command</li>
-      <li>! 表示取反，也就是不匹配的行，也可以使用 <code class="highlighter-rouge">vglobal</code></li>
+      <li>! 表示取反，也就是不匹配的行，也可以使用 <code class="highlighter-rouge">vglobal</code>
+</li>
       <li>command 默认是打印文本</li>
       <li>整个命令可以理解成，在 range 范围内匹配 patter 的行执行 Ex command。</li>
       <li>常用的Ex command：d（删除）、m（移动）、t（拷贝）、s（替换）</li>
-      <li>删除匹配的行：<code class="highlighter-rouge">:g/pattern/d</code></li>
-      <li>删除不匹配的行：<code class="highlighter-rouge">:g!/pattern/d</code></li>
-      <li>删除空白行：<code class="highlighter-rouge">:g/^$/d</code></li>
-      <li>将匹配的行移到文件末尾：<code class="highlighter-rouge">g/pattern/m$</code></li>
-      <li>复制匹配的行到文件末尾：<code class="highlighter-rouge">g/pattern/t$</code></li>
+      <li>删除匹配的行：<code class="highlighter-rouge">:g/pattern/d</code>
+</li>
+      <li>删除不匹配的行：<code class="highlighter-rouge">:g!/pattern/d</code>
+</li>
+      <li>删除空白行：<code class="highlighter-rouge">:g/^$/d</code>
+</li>
+      <li>将匹配的行移到文件末尾：<code class="highlighter-rouge">g/pattern/m$</code>
+</li>
+      <li>复制匹配的行到文件末尾：<code class="highlighter-rouge">g/pattern/t$</code>
+</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="正则表达式">正则表达式</h2>
+<h2 id="正则表达式">
+<a class="anchor" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>正则表达式</h2>
 
 <ul>
   <li>正则表达式的元字符必须用反斜杠进行转义才行</li>
-  <li>非贪婪匹配：<code class="highlighter-rouge">.\{-}</code>，贪婪匹配：<code class="highlighter-rouge">.*</code></li>
+  <li>非贪婪匹配：<code class="highlighter-rouge">.\{-}</code>，贪婪匹配：<code class="highlighter-rouge">.*</code>
+</li>
 </ul>
 
-<h2 id="使用终端">使用终端</h2>
+<h2 id="使用终端">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A8%E7%BB%88%E7%AB%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用终端</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">!{cmd}</code>是vim命令，可以用来执行一条shell命令，命令完成后按任意键返回vim。</li>
-  <li><code class="highlighter-rouge">Ctrl+z</code>可以立即挂起当前进程，比如vim，进入shell， 完成一系列命令后，使用<code class="highlighter-rouge">fg</code>来返回vim。</li>
-  <li><code class="highlighter-rouge">:sh[ell]</code>是vim命令，可以从vim中运行一个shell，完成一系列命令后，通过<code class="highlighter-rouge">Ctrl+d</code>结束当前shell并返回vim。</li>
+  <li>
+<code class="highlighter-rouge">!{cmd}</code>是vim命令，可以用来执行一条shell命令，命令完成后按任意键返回vim。</li>
+  <li>
+<code class="highlighter-rouge">Ctrl+z</code>可以立即挂起当前进程，比如vim，进入shell， 完成一系列命令后，使用<code class="highlighter-rouge">fg</code>来返回vim。</li>
+  <li>
+<code class="highlighter-rouge">:sh[ell]</code>是vim命令，可以从vim中运行一个shell，完成一系列命令后，通过<code class="highlighter-rouge">Ctrl+d</code>结束当前shell并返回vim。</li>
 </ul>
 
-<h2 id="vim-插件管理">vim 插件管理</h2>
+<h2 id="vim-插件管理">
+<a class="anchor" href="#vim-%E6%8F%92%E4%BB%B6%E7%AE%A1%E7%90%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>vim 插件管理</h2>
 
 <ul>
   <li>常用的vim插件管理方法是vundle。</li>
 </ul>
 
-<h2 id="其他命令">其他命令</h2>
+<h2 id="其他命令">
+<a class="anchor" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>其他命令</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">Ctrl -</code>缩小文本字号</li>
-  <li><code class="highlighter-rouge">Ctrl +</code>放大文本字号</li>
-  <li></li>
+  <li>
+<code class="highlighter-rouge">Ctrl -</code>缩小文本字号</li>
+  <li>
+<code class="highlighter-rouge">Ctrl +</code>放大文本字号</li>
+  <li>
 </ul>
+
+  </div><a class="u-url" href="/myblog/vim/2020/02/24/vim%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/myblog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/myblog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/myblog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/myblog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/myblog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

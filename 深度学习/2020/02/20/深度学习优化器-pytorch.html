@@ -1,4 +1,130 @@
-<head>
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>深度学习优化器（pytorch） | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="深度学习优化器（pytorch）" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="深度学习常用优化器理论与代码学习。" />
+<meta property="og:description" content="深度学习常用优化器理论与代码学习。" />
+<link rel="canonical" href="https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html" />
+<meta property="og:url" content="https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-02-20T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-02-20T00:00:00-06:00","headline":"深度学习优化器（pytorch）","description":"深度学习常用优化器理论与代码学习。","mainEntityOfPage":{"@type":"WebPage","@id":"https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html"},"@type":"BlogPosting","url":"https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html","dateModified":"2020-02-20T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/myblog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://leiyu-thunder.github.io/myblog/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/myblog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>深度学习优化器（pytorch） | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="深度学习优化器（pytorch）" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="深度学习常用优化器理论与代码学习。" />
+<meta property="og:description" content="深度学习常用优化器理论与代码学习。" />
+<link rel="canonical" href="https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html" />
+<meta property="og:url" content="https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-02-20T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-02-20T00:00:00-06:00","headline":"深度学习优化器（pytorch）","description":"深度学习常用优化器理论与代码学习。","mainEntityOfPage":{"@type":"WebPage","@id":"https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html"},"@type":"BlogPosting","url":"https://leiyu-thunder.github.io/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html","dateModified":"2020-02-20T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://leiyu-thunder.github.io/myblog/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    // remove paragraph tags in rendered toc (happens from notebooks)
+    var toctags = document.querySelectorAll(".toc-entry")
+    toctags.forEach(e => (e.firstElementChild.innerText = e.firstElementChild.innerText.replace('¶', '')))
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/myblog/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/myblog/about/">About Me</a><a class="page-link" href="/myblog/search/">Search</a><a class="page-link" href="/myblog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">深度学习优化器（pytorch）</h1><p class="page-description">深度学习常用优化器理论与代码学习。</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-02-20T00:00:00-06:00" itemprop="datePublished">
+        Feb 20, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/myblog/categories/#深度学习">深度学习</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#常用深度学习优化器理论与pytorch代码">常用深度学习优化器：理论与pytorch代码</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#sgdstochastic-gradient-descent">SGD(Stochastic Gradient Descent)</a></li>
+<li class="toc-entry toc-h2"><a href="#sgd-with-momentum">SGD with momentum</a></li>
+<li class="toc-entry toc-h2"><a href="#nesterov-accelerated-gradient-nag">Nesterov Accelerated Gradient (NAG)</a></li>
+<li class="toc-entry toc-h2"><a href="#adagrad">AdaGrad</a></li>
+<li class="toc-entry toc-h2"><a href="#adadelta">Adadelta</a></li>
+<li class="toc-entry toc-h2"><a href="#rmsprop">RMSprop</a></li>
+<li class="toc-entry toc-h2"><a href="#adam-adaptive-moment-estimation">Adam (Adaptive Moment Estimation)</a></li>
+<li class="toc-entry toc-h2"><a href="#adam-with-weight-decay">Adam with Weight Decay</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#参考文献">参考文献</a></li>
+</ul>
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -8,11 +134,13 @@
             }
         });
     </script>
-</head>
 
-<h1 id="常用深度学习优化器理论与pytorch代码">常用深度学习优化器：理论与pytorch代码</h1>
 
-<h2 id="sgdstochastic-gradient-descent">SGD(Stochastic Gradient Descent)</h2>
+<h1 id="常用深度学习优化器理论与pytorch代码">
+<a class="anchor" href="#%E5%B8%B8%E7%94%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8%E7%90%86%E8%AE%BA%E4%B8%8Epytorch%E4%BB%A3%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>常用深度学习优化器：理论与pytorch代码</h1>
+
+<h2 id="sgdstochastic-gradient-descent">
+<a class="anchor" href="#sgdstochastic-gradient-descent" aria-hidden="true"><span class="octicon octicon-link"></span></a>SGD(Stochastic Gradient Descent)</h2>
 
 <p>随机梯度下降中的”stochastic”表示用小批量数据代表模型梯度更新方向。</p>
 
@@ -27,7 +155,8 @@
     <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">d_p</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="sgd-with-momentum">SGD with momentum</h2>
+<h2 id="sgd-with-momentum">
+<a class="anchor" href="#sgd-with-momentum" aria-hidden="true"><span class="octicon octicon-link"></span></a>SGD with momentum</h2>
 
 <p>SGD的缺点之一是容易在局部极值点反复震荡，解决方法之一在更新过程中加入历史更新信息。类似于从山上滚下的石头，没有阻力的话动量越来越大，遇到阻力动量变小。采用这种方法能够加快收敛速度，并减小震荡。</p>
 
@@ -54,7 +183,8 @@
 
 <p>其中<code class="highlighter-rouge">buf</code>就是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span>，此外，pytorch的官方实现中跟公式的区别在于代码中对于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>∗</mo><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\gamma * v_{t-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.638891em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span>项也乘了<code class="highlighter-rouge">lr</code>，也就是公式中的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span></span></span></span>。</p>
 
-<h2 id="nesterov-accelerated-gradient-nag">Nesterov Accelerated Gradient (NAG)</h2>
+<h2 id="nesterov-accelerated-gradient-nag">
+<a class="anchor" href="#nesterov-accelerated-gradient-nag" aria-hidden="true"><span class="octicon octicon-link"></span></a>Nesterov Accelerated Gradient (NAG)</h2>
 
 <p>公式：</p>
 
@@ -97,7 +227,8 @@ v_{t+1} &amp;= \gamma v_t + \nabla_\theta J(\theta_t^\prime)
     <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">group</span><span class="p">[</span><span class="s">'lr'</span><span class="p">],</span> <span class="n">d_p</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="adagrad">AdaGrad</h2>
+<h2 id="adagrad">
+<a class="anchor" href="#adagrad" aria-hidden="true"><span class="octicon octicon-link"></span></a>AdaGrad</h2>
 
 <p>AdaGrad是为了解决SGD中学习率固定不变的问题，使得更新的学习率具有自适应能力。具体的想法就是用一个参数来存储历史梯度信息，然后在对应的更新过程中对学习率进行去归一化，从而实现对梯度较大的参数学习率较小，梯度较小的参数学习率较大的自适应更新。</p>
 
@@ -123,7 +254,8 @@ G_{t,ii} &amp;= G_{t-1,ii} + g_{t,i}^2 \\
 </span>    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">addcdiv_</span><span class="p">(</span><span class="o">-</span><span class="n">clr</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="adadelta">Adadelta</h2>
+<h2 id="adadelta">
+<a class="anchor" href="#adadelta" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adadelta</h2>
 
 <p>Adadelta是AdaGrad的改进，不再保存过去的所有梯度信息，而是采用decaying average的方法存储历史梯度信息和参数值。</p>
 
@@ -162,7 +294,8 @@ x_{t+1} &amp;= x_t + \Delta x_t
     <span class="n">acc_delta</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="rmsprop">RMSprop</h2>
+<h2 id="rmsprop">
+<a class="anchor" href="#rmsprop" aria-hidden="true"><span class="octicon octicon-link"></span></a>RMSprop</h2>
 
 <p>RMSprop实际上就是把AdaGrad中历史梯度信息的累积方法改为decaying average方式。</p>
 
@@ -205,7 +338,8 @@ E[g]_t &amp;= \rho E[g]_{t-1} + (1-\rho)g_t \\
 \theta_{t+1} &amp;= \theta_t - \frac{\eta}{\sqrt{E[g^2]_t - E[g]_t^2 +\epsilon}} \cdot g_t
 \end{align}</span>
 
-<h2 id="adam-adaptive-moment-estimation">Adam (Adaptive Moment Estimation)</h2>
+<h2 id="adam-adaptive-moment-estimation">
+<a class="anchor" href="#adam-adaptive-moment-estimation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adam (Adaptive Moment Estimation)</h2>
 
 <p>Adam受到RMSprop和Momentum的启发，利用梯度的一阶和二阶矩估计为每个参数自适应地计算学习率。</p>
 
@@ -262,7 +396,8 @@ v_t &amp;= \beta_2 v_{t-1} + (1-\beta_2)\cdot g_t^2 \\
 \theta_t &amp;= \theta_{t-1} - \alpha_t \cdot \frac{m_t}{\sqrt{v_t}+\epsilon}
 \end{align}</span>
 
-<h2 id="adam-with-weight-decay">Adam with Weight Decay</h2>
+<h2 id="adam-with-weight-decay">
+<a class="anchor" href="#adam-with-weight-decay" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adam with Weight Decay</h2>
 
 <p>这是一篇解释AdamW的好文章：<a href="https://towardsdatascience.com/why-adamw-matters-736223f31b5d">Why AdamW matters</a>。</p>
 
@@ -270,7 +405,7 @@ v_t &amp;= \beta_2 v_{t-1} + (1-\beta_2)\cdot g_t^2 \\
 
 <p>从下面的图中可以清楚看到L2正则化与Weight decay更新的区别。L2正则化因为是在Loss function中加入正则化项，不仅影响梯度的计算，也影响了$m_t$和$v_t$这两个保存梯度历史信息的参数。而weight decay是在参数更新的时候直接进行计算，不会将weight decay的影响带入其他地方。</p>
 
-<p class="center"><img src="/myblog/images/2020-02-20-深度学习优化器/AdamL2VsAdamW.png" alt="" title="from: Fixing Weight Decay Regularization in Adam” by Ilya Loshchilov, Frank Hutter." /></p>
+<p class="center"><img src="/myblog/images/2020-02-20-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8/AdamL2VsAdamW.png" alt="" title="from: Fixing Weight Decay Regularization in Adam” by Ilya Loshchilov, Frank Hutter."></p>
 
 <p>pytorch 代码：（代码跟Adam的代码相比只是多了一行进行weight decay的计算，其他的完全一样）</p>
 
@@ -283,7 +418,8 @@ v_t &amp;= \beta_2 v_{t-1} + (1-\beta_2)\cdot g_t^2 \\
 </span>    <span class="c1"># 同Adam代码
 </span></code></pre></div></div>
 
-<h1 id="参考文献">参考文献</h1>
+<h1 id="参考文献">
+<a class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>参考文献</h1>
 
 <ol>
   <li><a href="https://byjiang.com/2017/09/10/A_Brief_Of_Optimization_Algorithms/">梯度下降优化算法综述与PyTorch实现源码剖析</a></li>
@@ -291,3 +427,36 @@ v_t &amp;= \beta_2 v_{t-1} + (1-\beta_2)\cdot g_t^2 \\
   <li><a href="https://www.fast.ai/2018/07/02/adam-weight-decay/">AdamW and Super-convergence is now the fastest way to train neural nets</a></li>
   <li><a href="https://towardsdatascience.com/why-adamw-matters-736223f31b5d">Why AdamW matters</a></li>
 </ol>
+
+  </div><a class="u-url" href="/myblog/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/2020/02/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8-pytorch.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/myblog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/myblog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/myblog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/myblog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/myblog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
