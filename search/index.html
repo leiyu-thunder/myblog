@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://leiyu-thunder.github.io/myblog/search/" />
 <meta property="og:site_name" content="个人笔记" />
 <script type="application/ld+json">
-{"description":"An easy to use blogging platform with support for Jupyter Notebooks.","@type":"WebPage","url":"https://leiyu-thunder.github.io/myblog/search/","headline":"Search","@context":"https://schema.org"}</script>
+{"headline":"Search","description":"An easy to use blogging platform with support for Jupyter Notebooks.","@type":"WebPage","url":"https://leiyu-thunder.github.io/myblog/search/","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/myblog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://leiyu-thunder.github.io/myblog/feed.xml" title="个人笔记" /><link rel="shortcut icon" type="image/x-icon" href="/myblog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Search | 个人笔记</title>
@@ -26,7 +26,7 @@
 <meta property="og:url" content="https://leiyu-thunder.github.io/myblog/search/" />
 <meta property="og:site_name" content="个人笔记" />
 <script type="application/ld+json">
-{"description":"An easy to use blogging platform with support for Jupyter Notebooks.","@type":"WebPage","url":"https://leiyu-thunder.github.io/myblog/search/","headline":"Search","@context":"https://schema.org"}</script>
+{"headline":"Search","description":"An easy to use blogging platform with support for Jupyter Notebooks.","@type":"WebPage","url":"https://leiyu-thunder.github.io/myblog/search/","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -37,7 +37,7 @@ function wrap_img(fn) {
     if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
         var elements = document.querySelectorAll(".post img");
         Array.prototype.forEach.call(elements, function(el, i) {
-            if (el.getAttribute("title")) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
                 const caption = document.createElement('figcaption');
                 var node = document.createTextNode(el.getAttribute("title"));
                 caption.appendChild(node);
@@ -59,9 +59,6 @@ window.onload = wrap_img;
     // add link icon to anchor tags
     var elem = document.querySelectorAll(".anchor-link")
     elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
-    // remove paragraph tags in rendered toc (happens from notebooks)
-    var toctags = document.querySelectorAll(".toc-entry")
-    toctags.forEach(e => (e.firstElementChild.innerText = e.firstElementChild.innerText.replace('¶', '')))
     });
 </script>
 </head><body><header class="site-header">

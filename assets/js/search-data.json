@@ -51,9 +51,6 @@
   
 
   
-  
-
-  
 
   
   
@@ -64,6 +61,25 @@
   
 
   
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+      ,"page11": {
+          "title": "",
+          "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
+          "url": "https://leiyu-thunder.github.io/myblog/robots.txt",
+          "relUrl": "/robots.txt",
+          "date": ""
+      }
+      
   
 
 }
