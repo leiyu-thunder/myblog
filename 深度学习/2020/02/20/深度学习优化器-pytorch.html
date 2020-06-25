@@ -98,7 +98,7 @@ window.onload = wrap_img;
     
       <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
       
-        <a class="category-tags-link" href="myblog/categories/#深度学习">深度学习</a>
+        <a class="category-tags-link" href="/myblog/categories/#深度学习">深度学习</a>
         
       
       </p>
@@ -402,7 +402,7 @@ v_t &amp;= \beta_2 v_{t-1} + (1-\beta_2)\cdot g_t^2 \\
 
 <p>从下面的图中可以清楚看到L2正则化与Weight decay更新的区别。L2正则化因为是在Loss function中加入正则化项，不仅影响梯度的计算，也影响了$m_t$和$v_t$这两个保存梯度历史信息的参数。而weight decay是在参数更新的时候直接进行计算，不会将weight decay的影响带入其他地方。</p>
 
-<p class="center"><img src="myblog/images/2020-02-20-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8/AdamL2VsAdamW.png" alt="" title="from: Fixing Weight Decay Regularization in Adam” by Ilya Loshchilov, Frank Hutter."></p>
+<p class="center"><img src="/myblog/images/2020-02-20-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%99%A8/AdamL2VsAdamW.png" alt="" title="from: Fixing Weight Decay Regularization in Adam” by Ilya Loshchilov, Frank Hutter."></p>
 
 <p>pytorch 代码：（代码跟Adam的代码相比只是多了一行进行weight decay的计算，其他的完全一样）</p>
 
